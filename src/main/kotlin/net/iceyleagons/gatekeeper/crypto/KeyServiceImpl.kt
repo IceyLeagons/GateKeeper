@@ -28,6 +28,15 @@ class KeyServiceImpl(@Value("\${gatekeeper.security.keysFolder}") keysFolder: St
         keyPair = loadOrCreateKeyPair(path.resolve("public.key"), path.resolve("private.key"))
     }
 
+    /**
+     * Checks whether our keys exist. If they don't we will create them via the JWT library.
+     * The crypto algorithm to be used is defined in SecurityConfig
+     *
+     * @param publicPath path to the public key
+     * @param privatePath path to the private key
+     *
+     * @return the loaded or created KeyPair
+     */
     private fun loadOrCreateKeyPair(publicPath: Path, privatePath: Path): KeyPair {
         if (!Files.exists(publicPath) || !Files.exists(privatePath)) {
             val kp = Keys.keyPairFor(SecurityConfig.CRYPTO_ALGORITHM)
@@ -37,6 +46,13 @@ class KeyServiceImpl(@Value("\${gatekeeper.security.keysFolder}") keysFolder: St
         return loadKeyPair(publicPath, privatePath)
     }
 
+    /**
+     * Loads a keypair from the given public & private key paths.
+     *
+     * @param privatePath path to the private key file
+     * @param publicPath path to the public key file
+     * @return the resulting KeyPair
+     */
     private fun loadKeyPair(publicPath: Path, privatePath: Path): KeyPair {
         val decoder = Base64.getDecoder()
         val encPub = decoder.decode(Files.readAllBytes(publicPath))
@@ -49,6 +65,13 @@ class KeyServiceImpl(@Value("\${gatekeeper.security.keysFolder}") keysFolder: St
         return KeyPair(pub, priv)
     }
 
+    /**
+     * Saves the given keypair to the given file paths.
+     *
+     * @param keyPair the KeyPair to save
+     * @param publicPath the path where the public key should be stored
+     * @param privatePath the path where the private ke should be stored
+     */
     private fun saveKeyPair(keyPair: KeyPair, publicPath: Path, privatePath: Path): KeyPair {
         val encoder = Base64.getEncoder()
 
