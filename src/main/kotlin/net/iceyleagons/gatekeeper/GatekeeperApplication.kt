@@ -12,8 +12,8 @@ import java.util.*
 @SpringBootApplication
 class GatekeeperApplication(appRepo: AppRepo) {
     init {
-        //val app = OAuthApplication(UUID.randomUUID(), OAuthApplication.generateSecret(), "http://localhost:8081/")
-        //appRepo.save(app)
+        val app = OAuthApplication(UUID.randomUUID(), OAuthApplication.generateSecret(), "http://localhost:8081/")
+        appRepo.save(app)
     }
 }
 
