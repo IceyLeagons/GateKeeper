@@ -13,7 +13,7 @@ class TokenResponse(
         accessTokenExpires: Long,
 
         @JsonProperty("refresh_token")
-        val refreshToken: String
+        val refreshToken: String = ""
 ) {
 
     val accessTokenExpires: Long = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(accessTokenExpires)

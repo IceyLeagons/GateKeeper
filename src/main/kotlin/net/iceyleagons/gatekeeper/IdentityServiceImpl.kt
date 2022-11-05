@@ -136,7 +136,10 @@ class IdentityServiceImpl(
             val jwt = auth.credentials as Jwt
             val id = jwt.claims["id"] as String
 
-            if (refreshTokens) refreshAccessTokens(userRepository.findById(id)) else userRepository.findById(id)
+            if (refreshTokens)
+                refreshAccessTokens(userRepository.findById(id))
+            else
+                userRepository.findById(id)
         } catch (e: Exception) {
             Optional.empty()
         }
@@ -159,8 +162,10 @@ class IdentityServiceImpl(
 
         user.get().getIdentities().forEach { it ->
             if (System.currentTimeMillis() >= it.providerAccessTokenExpires) {
+                println("refreshing")
                 identityProviders[it.providerId]?.refreshAccessToken(it)
             }
+
         }
 
         return user
